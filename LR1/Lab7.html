@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Абизгильдина Диана</title>
+<script language="JavaScript" type="text/JavaScript">
+function printLesson(){
+    lesson = new Array("Обществознание","История","Математика","Физика");
+    humanities = new Array();
+    humanities = lesson.slice(0,2);
+    
+    technical = new Array();
+    technical = lesson.slice(2,4);
+    
+    document.write("Гуманитарные науки: " +humanities+"."+"<br>");
+
+    document.write("Точные науки: "+technical+"."+"<br>");
+}	
+</script>	
+</head>
+<body>
+<script language="JavaScript">
+year = new Array("декабрь","январь","февраль","март","апрель","май",
+"июнь","июль","август","сентябрь","октябрь","ноябрь");
+summer = new Array(); //летние месяцы
+summer=year.slice(6,9);
+document.write(summer+"<br>");
+
+printLesson();
+</script>
+<br>
+<input type="button" onclick="history.back();" value="Главная"/>
+</body>
+</html>
