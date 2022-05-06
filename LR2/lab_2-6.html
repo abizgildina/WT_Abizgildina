@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Абизгильдина Д.Р.</title>
+</head>
+
+<body>
+    <h1>Заголовок</h1>
+    <p>Выберите вариант ответа:</p>
+    <div>
+        <input type="radio" id="var1">
+        <label for="contactChoice1">1</label>
+
+        <input type="radio" id="var2">
+        <label for="contactChoice2">2</label>
+
+        <input type="radio" id="var3">
+        <label for="contactChoice3">3</label>
+    </div>
+    <div>
+        <button type="button" id="calculate">Рассчитать</button>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        let count1 = 0;
+        let count2 = 0;
+        let count3 = 0;
+
+        $('input[type=radio]').change(function() {
+            $(this).prop('checked', false);
+            if ($(this).attr('id') == 'var1') {
+                count1++;
+            }
+            if ($(this).attr('id') == 'var2') {
+                count2++;
+            }
+            if ($(this).attr('id') == 'var3') {
+                count3++;
+            }
+        });
+
+        $('#calculate').click(function() {
+            let sum = count1 + count2 + count3;
+            let p1 = count1 / sum * 100;
+            let p2 = count2 / sum * 100;
+            let p3 = count3 / sum * 100;
+            let text = 
+                `Вариант 1: ${count1}, ${p1.toFixed(2)}%
+                Вариант 2: ${count2}, ${p2.toFixed(2)}%
+                Вариант 3: ${count3}, ${p3.toFixed(2)}%`;
+            alert(text);
+        });
+
+    </script>
+</body>
+
+</html>

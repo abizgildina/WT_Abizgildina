@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Абизгильдина Д.Р.</title>
+</head>
+<body>
+    <span class="drag">Этот текст можно перемещать!</span>
+    <button class="drag">Эту кнопку тоже!</button>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $('.drag').mousedown(function (event) {
+            $(this).attr('class', 'drag on');
+        });
+
+        $('.drag').mousemove(function(event) {
+            if ($(this).attr('class') == 'drag on') {
+                $(this).css('position', 'absolute');
+                $(this).css('left', event.pageX - $(this).width() / 2);
+                $(this).css('top', event.pageY - $(this).height() / 2);
+            }
+        });
+
+        $('.drag').mouseup(function (event) {
+            $(this).attr('class', 'drag');
+        });
+    </script>
+</body>
+</html>

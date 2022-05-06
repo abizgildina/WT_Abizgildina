@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Абизгильдина Д.Р.</title>
+</head>
+
+<body>
+    <img src="cat.jpg" alt="котик" id="cat" width=150px height=100px>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).keydown(function (e) {
+            switch (e.keyCode) {
+                // Влево
+                case 37:
+                    console.log(1);
+                    $("#cat").animate({ marginLeft: '-=100px' });
+                    break;
+                // Вверх
+                case 38:
+                    $("#cat").animate({ marginTop: '-=100px' });
+                    break;
+                // Вправо                    
+                case 39:
+                    $("#cat").animate({ marginLeft: '+=100px' });
+                    break;
+                // Вниз
+                case 40:
+                    $("#cat").animate({ marginTop: '+=100px' });
+                    break;
+            }
+        });
+    </script>
+</body>
+
+</html>
