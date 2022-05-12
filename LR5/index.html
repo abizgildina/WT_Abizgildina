@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Абизгильдина Д.Р.</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+</head>
+
+<body>
+    <div class="background">
+        <div class="title">
+            <h1>Вариант №1 (крестики-нолики)</h1>
+        </div>
+        <div class="display">
+            <p id="display-score">Общий счет: 0-0</p>
+            <p id="display-player">Ходит игрок с <span id="current-player" class="playerX">X</span></p>
+        </div>
+        <div class="board">
+        </div>
+        <div class="controls">
+            <p>Введите размер поля:</p>
+            <input type="number" id="map-size" min="3" max="11" value="3" step="2">
+            <button id="restart">Новая игра</button>
+            <button id="reset">Сброс</button>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    <script>
+        var player = 'X';
+        var score = {
+            X: 0,
+            O: 0
+        };
+        var reset = $("#reset");
+        var restart = $("#restart");
+        var display = $(".display");
+        var displayCurrentPlayer = $("#current-player");
+        var displayScore = $("#display-score");
+        var mapSize = $("#map-size");
+        var mapSizeValue = 3;
+        var board = $(".board");
+
+        function generateMap() {
+            board.empty();
+            for (var i = 0; i < mapSizeValue; i++) {
+                board.append('<div class="row"></div>');
+                for (var j = 0; j < mapSizeValue; j++) {
+                    $(".row").last().append('<button class="cell" id="cell' + i + j + '"></button>');
+                }
+            }
+
+            board.on("click", ".cell", function() {
+                if ($(this).text() === "") {
+                    $(this).text(player);
+                    if (checkWin()) {
+                        if (player === "X") {
+                            score.X++;
+                        } else {
+                            score.O++;
+                        }
+                        displayScore.text("Общий счет: " + score.X + "-" + score.O);
+                        alert("Победил игрок с " + player);
+                        restart.click();
+                    } else if (checkDraw()) {
+                        alert("Ничья!");
+                        restart.click();
+                    } else {
+                        if (player === "X") {
+                            player = "O";
+                        } else {
+                            player = "X";
+                        }
+                        updateDisplayCurrentPlayer();
+                    }
+                }
+            });
+        }
+
+        function checkWin() {
+            function checkStreak(cells) {
+                let streak = $.grep(cells, function(cell) {
+                    return $(cell).text() === player;
+                }).length;
+                return streak == mapSizeValue;
+            }
+
+            // Проверка по горизонтали
+            for (var i = 0; i < 1; i++) {
+                let cells = $("button[id*='cell" + i + "']");
+                if (checkStreak(cells)) {
+                    console.log("По г")
+                    return true;
+                }
+            }
+
+            // Проверка по вертикали
+            let cells = [];
+            for (var i = 0; i < mapSizeValue; i++) {
+                cells = [];
+                for (var j = 0; j < mapSizeValue; j++) {
+                    cells.push($("button[id='cell" + j + i + "']"));
+                }
+                if (checkStreak(cells)) {
+                    console.log("По в")
+                    return true;
+                }
+            }
+
+            // Проверки по диагонали
+            cells = [];
+            for (var i = 0; i < mapSizeValue; i++) {
+                cells.push($("button[id*='cell" + i + i + "']"));
+            }
+            if (checkStreak(cells)) {
+                console.log("По д1")
+                return true;
+            }
+            cells = [];
+            for (var i = 0; i < mapSizeValue; i++) {
+                cells.push($("button[id*='cell" + (mapSizeValue - 1 - i) + i + "']"));
+            }
+            if (checkStreak(cells)) {
+                console.log("По д2")
+                return true;
+            }
+
+            return false;
+        }
+
+        function checkDraw() {
+            let cells = $("button[id*='cell']");
+            for (var i = 0; i < cells.length; i++) {
+                if (cells[i].textContent === "") {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function updateDisplayCurrentPlayer() {
+            displayCurrentPlayer.text(player);
+            displayCurrentPlayer.removeClass();
+            displayCurrentPlayer.addClass("player" + player);
+        }
+
+        $("#map-size").change(function() {
+            mapSizeValue = $(this).val();
+        });
+
+        $("#restart").click(function () {
+            player = 'X';
+            score = {
+                X: 0,
+                O: 0
+            };
+            updateDisplayCurrentPlayer();
+            generateMap();
+        });
+
+        $("#reset").click(function () {
+            $("#map-size").val(3).change();
+            ($("#restart").click());
+            score.X = 0;
+            score.O = 0;
+            displayScore.text("Общий счет: 0-0");
+        });
+    </script>
+</body>
+
+</html>
