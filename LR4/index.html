@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Абизгильдина Д.Р.</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Вариант №1 (перечень товаров, форма заявки):</h1>
+        <div id="accordion">
+            <h3>Товар 1</h3>
+            <div class="card">
+                <img src="jeans.jpg" alt="Denim Jeans" style="width:100%">
+                <h1>Джинсы</h1>
+                <p class="price">1290 руб.</p>
+                <p>Это очень крутые джинсы...</p>
+                <p><button id="buy">Купить</button></p>
+            </div>
+            <h3>Товар 2</h3>
+            <div class="card">
+                <img src="jeans.jpg" alt="Denim Jeans" style="width:100%">
+                <h1>Джинсы</h1>
+                <p class="price">1290 руб.</p>
+                <p>Другие модные джинсы.</p>
+                <p><button id="buy">Купить</button></p>
+            </div>
+            <h3>Товар 3</h3>
+            <div class="card">
+                <img src="jeans.jpg" alt="Denim Jeans" style="width:100%">
+                <h1>Джинсы</h1>
+                <p class="price">1290 руб.</p>
+                <p>Еще одни джинсы, не такие крутые.</p>
+                <p><button id="buy">Купить</button></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="dialog" title="Basic dialog">
+        <label for="username">Ваше имя:</label>
+        <input type="text" id="username" name="username">
+
+        <label for="quantity">Количество:</label>
+        <input type="number" id="quantity" name="quantity" value="1"> <br>
+
+        <label for="quantity">Дата доставки:</label>
+        <input type="text" id="datepicker" name="date">
+
+        <label for="city">Город:</label> <br> <br>
+        <select name="city" id="city-select">
+            <option selected="selected">Уфа</option>
+            <option>Казань</option>
+            <option>Стерлитамак</option>
+        </select>
+        <br> <br>
+        <label for="address">Адрес:</label>
+        <input type="text" id="address" name="address">
+
+        <label for="promo">Промокод
+            <a href="#" title="Скидка 10% на первую покупку при вводе промодода DIANA!">
+                (Как получить?)
+            </a>:</label>
+        <input type="text" id="promo" name="promo">
+
+        <label for="total">Итого:</label>
+        <input type="text" id="total" name="total" value="1290" readonly>
+
+        <button id="checkout">Оформить</button>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    <script>
+        $(function () {
+            let isPromoAplyed = false;
+
+            function getTotal() {
+                let total = 0;
+                let quantity = $('#quantity').val();
+                let price = 1290;
+                total = quantity * price;
+                if (isPromoAplyed) {
+                    total = total - (total * 0.1);
+                }
+                return total;
+            }
+
+            $(document).tooltip();
+
+            var select = $("#quantity");
+            var slider = $("<div id='slider'></div>").insertAfter(select).slider({
+                min: 1,
+                max: 10,
+                range: "min",
+                value: select[0].value,
+                slide: function (event, ui) {
+                    select[0].value = ui.value;
+                    $("#total").val(getTotal());
+                }
+            });
+            $("#quantity").on("change", function () {
+                slider.slider("value", this.value);
+                $("#total").val(getTotal());
+            });
+
+            $("#promo").on("change", function () {
+                if (this.value == "DIANA") {
+                    isPromoAplyed = true;
+                    $("#total").val(getTotal());
+                    $("#promo").prop("disabled", true);
+                    $("<p>Промокод успешно применен!</p>")
+                        .insertAfter("#promo")
+                        .css("color", "green")
+                        .css("margin-top", "0px");
+                }
+            });
+
+            $("#dialog").dialog({
+                autoOpen: false,
+                modal: true,
+                title: 'Купить Товар'
+            });
+
+            $("#buy").click(function () {
+                $("#dialog").dialog("open");
+                $("#accordion").accordion();
+                $("#datepicker").datepicker();
+                $("#city-select").selectmenu().addClass("overflow");
+                $("#address").autocomplete({
+                    source: [
+                        "ул. Революционная",
+                        "ул. Ленина",
+                        "ул. Маршала Жукова",
+                    ]
+                });
+            });
+
+            $("#checkout").click(function () {
+                if (confirm("Вы уверены, что хотите оформить заказ?")) {
+                    alert("Заказ успешно оформлен!");
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

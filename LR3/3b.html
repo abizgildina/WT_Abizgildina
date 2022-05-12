@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Абизгильдина Д.Р.</title>
+    <link rel="stylesheet" href="styleb.css">
+</head>
+
+<body>
+    <div class="container">
+        <form action="action_page.php">
+
+            <h1>Написание отзыва</h1>
+
+            <label for="username">Ваше имя</label>
+            <input type="text" id="username" name="username">
+
+            <label for="email">Ваш e-mail:</label>
+            <input type="email" id="email" name="email">
+
+            <label for="subject">Текст сообщения</label>
+            <textarea id="subject" name="subject" style="height:200px"></textarea>
+
+            <input type="submit" value="Отправить">
+
+        </form>
+    </div>
+
+    <h2>Предыдущие отзывы:</h2>
+
+    <div class="reviews">
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: "getdata_3b.php",
+                dataType: "json",
+                method: "GET",
+                success: function (response) {
+                    console.log(response);
+                    var data = response;
+
+                    data.forEach(function (item) {
+                        let date = (new Date(item.created_at)).toISOString().slice(0, 19).replace(/-/g, ".").replace("T", " ");;
+                        $('.reviews').append(`
+                            <div class="container">
+                                <img src="photo.jpg" alt="Avatar">
+                                <p>${item.username} писал(-а):</p>
+                                <p>${item.subject}</p>
+                                <span class="time-right">${date}</span>
+                            </div>
+                        `);
+                    });
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                }
+            });
+        });
+
+        $('input[type=submit]').click(function (event) {
+            event.preventDefault();
+
+            var username = $('#username').val();
+            var email = $('#email').val();
+            var subject = $('#subject').val();
+
+            $.ajax({
+                url: 'setdata_3b.php',
+                method: 'POST',
+                data: { username: username, email: email, subject: subject },
+                success: function (response) {
+                    console.log(response);
+                    alert("Отзыв успешно отправлен!");
+                    location.reload();  
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
